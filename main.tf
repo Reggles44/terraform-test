@@ -53,28 +53,14 @@ resource "proxmox_vm_qemu" "test" {
   }
 
   network {
-    id      = 0
-    bridge  = "vmbr0"
-    model   = "virtio"
+    id     = 0
+    bridge = "vmbr0"
+    model  = "virtio"
   }
 
   os_type       = "cloud-init"
   cicustom      = "user=local:snippets/debian.yml"
   ipconfig0     = "ip=dhcp"
   agent_timeout = 120
-
-  connection {
-    type        = "ssh"
-    user        = "debian"
-    private_key = file("~/.ssh/id_rsa")
-    host        = self.ssh_host
-    port        = self.ssh_port
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait"
-    ]
-  }
 }
 
